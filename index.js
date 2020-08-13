@@ -47,6 +47,43 @@ function Person() {
 
 }
 
+
+//We know our function is going to take three properties: name, age, and stomach.
+//We will pass ttributres as the parameter
+//stomach needs to be an empty array. We can then use prototypes to add and take away.
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+  this.stomach = [];
+}
+
+//prototype to eat
+
+Person.prototype.eat = function (someFood) {
+  if (this.stomach.length < 10) {
+    this.stomach.push(someFood);
+  }
+};
+
+//prototype for poop
+
+Person.prototype.poop = function () {
+  this.stomach = [];
+};
+
+//toString
+
+Person.prototype.toString = function () {
+  return `${this.name}, ${this.age}`;
+};
+
+let personObj = new Person ({
+  name: "Austin",
+  age: 23
+});
+
+console.log(personObj.toString);
+
 /*
   TASK 2
     - Write a Car constructor that initializes `model` and `milesPerGallon` from arguments.
@@ -60,10 +97,23 @@ function Person() {
     - STRETCH: A car which runs out of `fuel` while driving can't drive any more distance:
         + The `drive` method should return a string "I ran out of fuel at x miles!" x being `odometer`.
 */
+//constructor function must initialize model and milespergallon
+function Car(model, milesPerGallon) {
+  this.model = model;
+  this.milesPerGallon = milesPerGallon;
+  this.tank = 0;
+  this.odometer = 0;
+};
 
-function Car() {
+Car.prototype.fill = function (gallons) {
+  this.tank += gallons;
+};
 
-}
+//prototype for drive(distance):
+  //Cause odometer to go up.
+//should cause tank to go down with milesPerGallon considered.
+
+
 
 /*
   TASK 3
@@ -72,24 +122,38 @@ function Car() {
     - Besides the methods on Person.prototype, babies have the ability to `.play()`:
         + Should return a string "Playing with x", x being the favorite toy.
 */
-function Baby() {
-
+function Baby(name, age, favoriteToy) {
+  Person.call(this, name, age);
+  this.favoriteToy = favoriteToy;
 }
+
+Baby.prototype = Object.create(Person.prototype);
+
+Baby.prototype.play = function () {
+  return `Playing with ${this.favoriteToy}`;
+};
 
 /* 
   TASK 4
 
   In your own words explain the four principles for the "this" keyword below:
-  1. 
-  2. 
-  3. 
-  4. 
-*/
+
+  1. Global binding - "this" is global and can be found in the window.
+
+  2. Implicit Binding - "this" is implied when you call the object with dot notation. 
+    The object to the left of the dot is what "this" refers to.
+
+  3. New Binding - when you create a constructor function, "this" will be referenced with the "new" keyword.
+
+  4. Explict Binding - When you call a function, you use either ".call" or ".apply" to explicitly define "this"
+
+
 
 
 ///////// END OF CHALLENGE /////////
 ///////// END OF CHALLENGE /////////
 ///////// END OF CHALLENGE /////////
+
 if (typeof exports !== 'undefined') {
   module.exports = module.exports || {}
   if (Airplane) { module.exports.Airplane = Airplane }
